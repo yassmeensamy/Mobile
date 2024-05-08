@@ -1,3 +1,4 @@
+import 'package:app/Cubits/cubit/location_cubit.dart';
 import 'package:app/Cubits/cubit/resturant_cubit.dart';
 import 'package:app/Models/RestaurantModel.dart';
 import 'package:flutter/material.dart';
@@ -5,9 +6,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class StoreCard extends StatelessWidget {
   final Restaurant store;
+
   StoreCard({required this.store});
   @override
   Widget build(BuildContext context) {
+     
+      double distance = BlocProvider.of<LocationCubit>(context).calculateDistance(store.lat,store.long);
         return InkWell(
       onTap: () 
       {  
@@ -32,10 +36,11 @@ class StoreCard extends StatelessWidget {
                       width: 0.5,
                     ),
                     borderRadius: BorderRadius.circular(10),
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: AssetImage("Assets/cover.png"),
-                    ),
+                 image: DecorationImage(
+  fit: BoxFit.cover,
+  image: NetworkImage(store.image),
+),
+
                   ),
                 ),
                 SizedBox(width: 10),
@@ -81,7 +86,8 @@ class StoreCard extends StatelessWidget {
                                          child:
                                          Padding(padding: EdgeInsets.only(top:6,bottom: 6,right: 3,left: 3),child:
                                          //Text(distance.toString()+" km",style: TextStyle(color: Colors.white),),
-                                         Text(" km",style: TextStyle(color: Colors.white),),
+
+                                         Text(distance.toString()+" km",style: TextStyle(color: Colors.white),),
                                            ),
                                           ),
                       )

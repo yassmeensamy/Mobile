@@ -4,7 +4,8 @@ import 'package:app/Models/RestaurantModel.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
-import 'package:latlong2/latlong.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 part 'resturant_state.dart';
 
 class ResturantCubit extends Cubit<ResturantState> 

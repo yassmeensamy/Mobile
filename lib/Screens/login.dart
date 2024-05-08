@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:app/Controllers.dart' as controller;
+import 'package:app/Cubits/cubit/location_cubit.dart';
 import 'package:app/Cubits/cubit/log_in_cubit.dart';
 import 'package:app/Cubits/cubit/resturant_cubit.dart';
 import 'package:app/Screens/ResturandScreen.dart';
@@ -44,8 +45,10 @@ class Login extends StatelessWidget
          
           Future.delayed(Duration(seconds: 2), ()
           {
-             BlocProvider.of<ResturantCubit>(context).FetchResturantData();
-            Navigator.pushReplacement(
+             
+            BlocProvider.of<LocationCubit>(context).getCurrentLocation();
+             // BlocProvider.of<ResturantCubit>(context).FetchResturantData();
+              Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                       builder: (context) =>ResturantScreen(),

@@ -43,7 +43,10 @@ dependencies:
   rflutter_alert: ^2.0.7
   google_fonts: 6.1.0
   flutter_map: ^6.1.0
-  latlong2: ^0.9.1
+  google_maps_flutter: ^2.5.3
+  geolocator: ^11.0.0
+ 
+
   #awesome_dialog: ^3.0.0
 
 dev_dependencies:

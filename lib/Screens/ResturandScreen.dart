@@ -1,3 +1,4 @@
+import 'package:app/Cubits/cubit/location_cubit.dart';
 import 'package:app/Cubits/cubit/resturant_cubit.dart';
 import 'package:app/Models/RestaurantModel.dart';
 import 'package:app/Screens/ProductsScreen.dart';
@@ -8,22 +9,18 @@ import 'package:flutter_bloc/flutter_bloc.dart'; // Import flutter_bloc package
 
 class ResturantScreen extends StatelessWidget {
   const ResturantScreen({Key? key}) : super(key: key);
-  
+
   @override
   Widget build(BuildContext context) {
-    List<Restaurant>restaurants=[];
-    // BlocProvider.of<ResturantCubit>(context).FetchResturantData();
-    //List<String>description["burge","burger","burger"];
+    List<Restaurant> restaurants = [];
     return Scaffold(
-      appBar: AppBar
-      (
+      appBar: AppBar(
         toolbarHeight: 30,
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.person, color: Colors.orange),
-          onPressed: () 
-          {
+          onPressed: () {
             print('Leading icon pressed');
           },
           iconSize: 30,
@@ -31,41 +28,79 @@ class ResturantScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: Icon(Icons.search, color: Colors.orange),
-            onPressed: () async
-             {
-               BlocProvider.of<ResturantCubit>(context, listen: false).clearSearchResults();
-                Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) =>SearchScreen()),
-            ); 
+            onPressed: () async {
+              BlocProvider.of<ResturantCubit>(context, listen: false)
+                  .clearSearchResults();
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SearchScreen()),
+              );
             },
             iconSize: 23,
           ),
         ],
       ),
       backgroundColor: Colors.white.withOpacity(.97),
-      body: 
-      BlocConsumer<ResturantCubit, ResturantState>( 
-        listener: (context, state) 
+      body: BlocBuilder<LocationCubit, LocationState>(
+        builder: (context, locationState) 
         {
-           if (state is NavigateToProductScreen)
+           if (locationState is LocationLoading)
            {
+            return Center(child: CircularProgressIndicator());
+            } 
+          else if (locationState is LocationLoaded) 
+          {
+            final currentPosition =context.read<LocationCubit>().currentPosition;
+             print(currentPosition!.latitude);
+             print(currentPosition!.longitude);
+                    
+             BlocProvider.of<ResturantCubit>(context)..FetchResturantData();
+              return BlocConsumer<ResturantCubit, ResturantState>
+              (
+                listener: (context, state) 
+                {
+                  if (state is NavigateToProductScreen) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ProductsScreen()),
+                    );
+                  }
+                },
+                builder: (context, state) 
+                {
+                  
+                  if (state is ResturanrSucess)
+                  
+                    restaurants = state.restaurants;
+                    return RestaurantList(restaurants: restaurants);
+                  /*
+                  }
+                  
+                  else 
+                  {
+                    print(state.runtimeType);
+                    return Container(color: Colors.blue,);
+                  }
+                  */
+                } 
 
-            Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ProductsScreen()),
-            ); 
-           }
-        },
-        builder: (context, state) {
-          if(state is ResturanrSucess)
-           restaurants=state.restaurants;
-          return  RestaurantList(restaurants: restaurants,);
-        },
+              );
+            } 
+             
+            else 
+              {
+                 print(locationState.runtimeType);
+                return Container(color: Colors.black,);
+              }
+              
+          } 
+         
+       
       ),
     );
   }
 }
+
 class RestaurantList extends StatelessWidget {
       List<Restaurant>restaurants;
        RestaurantList({ required this.restaurants});
@@ -86,3 +121,4 @@ class RestaurantList extends StatelessWidget {
           );
   }
 }
+

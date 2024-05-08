@@ -1,10 +1,11 @@
-import 'package:app/Screens/Loction.dart';
+import 'package:app/Screens/GoogleMapScreen.dart';
 import 'package:app/Screens/ResturandScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:app/Cubits/cubit/resturant_cubit.dart';
 import 'package:app/Models/RestaurantModel.dart';
 import 'package:app/Screens/Screen.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class SearchScreen extends StatelessWidget {
   @override
@@ -37,7 +38,9 @@ class SearchScreen extends StatelessWidget {
                 }
                 else if (state is MapLocation)
                 {
-                  return LocationState(markerPoints: state.markerPoints,);
+                 
+                  return  GoogleMapPage(markerPoints:state.markerPoints,);
+                  //LocationState(markerPoints: state.markerPoints,);
                 }
                 else 
                 {
